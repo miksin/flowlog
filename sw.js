@@ -1,5 +1,5 @@
 /* Flowlog service worker — cache-first shell */
-const CACHE = 'liuchuiben-v1';
+const CACHE = 'flowlog-v2';
 const ASSETS = [
   './',
   './index.html',
