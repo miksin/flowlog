@@ -1,12 +1,12 @@
 /* Flowlog service worker — cache-first shell */
-const CACHE = 'flowlog-v3';
+const CACHE = 'flowlog-v4';
 const ASSETS = [
   './',
   './index.html',
   './manifest.webmanifest',
-  './icons/icon-192v2.png',
-  './icons/icon-512v2.png',
-  './icons/icon-512v2-maskable.png'
+  './icons/icon-192.png',
+  './icons/icon-512.png',
+  './icons/icon-512-maskable.png'
 ];
 
 self.addEventListener('install', (e) => {
