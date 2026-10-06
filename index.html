@@ -1,16 +1,16 @@
 <!doctype html>
-<html lang="zh-Hant">
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#f7f3ec">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="apple-mobile-web-app-title" content="流水本">
+<meta name="apple-mobile-web-app-title" content="Flowlog">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="icons/icon-192.png">
 <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
-<title>流水本</title>
+<title>Flowlog</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -30,7 +30,7 @@ body{
   font-family:var(--serif);
   -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
 }
-/* 紙紋噪點 */
+/* Paper-grain noise */
 body::before{
   content:"";position:fixed;inset:0;pointer-events:none;z-index:50;
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.55'/%3E%3C/svg%3E");
@@ -47,7 +47,7 @@ h1{font-size:20px;font-weight:700;color:var(--ink);letter-spacing:.01em}
 .count{font-family:var(--mono);font-size:12px;color:var(--mut)}
 .composer{position:relative}
 .composer input{
-  width:100%;height:48px;padding:0 64px 0 16px;
+  width:100%;height:48px;padding:0 76px 0 16px;
   background:var(--card);border:1px solid var(--line);border-radius:10px;
   box-shadow:inset 0 1px 2px rgba(122,106,80,.06),0 1px 2px rgba(122,106,80,.08);
   color:var(--ink);font-size:16px;font-family:var(--serif);outline:none;
@@ -91,7 +91,7 @@ main{padding:18px 0 90px}
   flex:1;font:inherit;color:var(--ink);background:transparent;border:0;outline:none;font-size:15.5px;
   border-bottom:1px dashed var(--faint);padding-bottom:1px;
 }
-/* 鋼筆墨水的分隔 */
+/* Fountain-pen day divider */
 .sep{
   display:flex;align-items:center;gap:10px;margin:28px 0 8px;
   font-family:var(--mono);font-size:11px;letter-spacing:.1em;color:var(--mut);text-transform:uppercase;
@@ -111,32 +111,33 @@ footer{font-family:var(--mono);font-size:11px;color:var(--faint);text-align:cent
 <body>
 <header class="top">
   <div class="wrap">
-    <div class="hdrow"><h1>流水本</h1><div class="count" id="count">0 notes</div></div>
+    <div class="hdrow"><h1>Flowlog</h1><div class="count" id="count">0 notes</div></div>
     <div class="composer">
-      <input id="composer" type="text" autocomplete="off" placeholder="想什麼就打下來，Enter 送出">
+      <input id="composer" type="text" autocomplete="off" placeholder="Type what you think. Enter saves.">
       <span class="kbd">↵ enter</span>
     </div>
-    <div class="search"><input id="search" type="text" autocomplete="off" placeholder="搜尋歷史筆記…　（按 / 跳過來）"></div>
+    <div class="search"><input id="search" type="text" autocomplete="off" placeholder="Search note history… (press / to focus)"></div>
   </div>
 </header>
 <main><div class="wrap" id="feed"></div></main>
-<footer id="foot">資料存在這台裝置的瀏覽器裡 · 不出網路</footer>
+<footer id="foot">Notes live in this device's browser. They never leave your machine.</footer>
 <script>
-var KEY='liuchuiben.v1';
+var KEY='flowlog.v1';
 var notes=[];
 try{notes=JSON.parse(localStorage.getItem(KEY)||'[]')}catch(e){notes=[]}
-function save(){try{localStorage.setItem(KEY,JSON.stringify(notes))}catch(e){document.getElementById('foot').textContent='⚠ 這個瀏覽器存不了資料（可能無痕模式）'}}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(notes))}catch(e){document.getElementById('foot').textContent='⚠ Cannot save notes in this browser (private mode?)'}}
 var feed=document.getElementById('feed'),ci=document.getElementById('composer'),si=document.getElementById('search'),cnt=document.getElementById('count');
 var freshId=null;
 function dayKey(ts){var d=new Date(ts);return new Date(d.getFullYear(),d.getMonth(),d.getDate()).getTime()}
 function todayKey(){return dayKey(Date.now())}
 function yDayKey(){var n=new Date();n.setDate(n.getDate()-1);return dayKey(n.getTime())}
 function hhmm(ts){var d=new Date(ts);return ('0'+d.getHours()).slice(-2)+':'+('0'+d.getMinutes()).slice(-2)}
+var DOW=['SUN','MON','TUE','WED','THU','FRI','SAT'];
 function label(k){
-  if(k===todayKey())return 'TODAY 今天';
-  if(k===yDayKey())return 'YESTERDAY 昨天';
+  if(k===todayKey())return 'TODAY';
+  if(k===yDayKey())return 'YESTERDAY';
   var d=new Date(k);
-  return (d.getMonth()+1)+'/'+d.getDate()+' '+'SUN MON TUE WED THU FRI SAT'.split(' ')[d.getDay()];
+  return (d.getMonth()+1)+'/'+d.getDate()+' '+DOW[d.getDay()];
 }
 function noteNode(n,isEdit){
   var w=document.createElement('div');w.className='note'+(n.id===freshId?' fresh':'');
@@ -152,7 +153,7 @@ function noteNode(n,isEdit){
     tx.addEventListener('click',function(){freshId=null;render(n.id)});
   }
   var tm=document.createElement('div');tm.className='tm';tm.textContent=hhmm(n.ts);
-  var del=document.createElement('button');del.className='del';del.type='button';del.title='刪除';del.textContent='✕';
+  var del=document.createElement('button');del.className='del';del.type='button';del.title='Delete';del.textContent='✕';
   del.addEventListener('click',function(e){e.stopPropagation();
     notes=notes.filter(function(x){return x.id!==n.id});save();render()});
   w.appendChild(tx);w.appendChild(tm);w.appendChild(del);
@@ -175,7 +176,8 @@ function render(editId){
   }
   if(!list.length){
     var e=document.createElement('div');e.className='empty';
-    e.innerHTML='<span class="flourish">❦ ❦ ❦</span><em>'+(q?('沒有符合「'+q+'」的筆記'):'還是空白的一頁。想什麼，就先打下來。')+'</em>';
+    var safe=q.replace(/[&<>"']/g,'');
+    e.innerHTML='<span class="flourish">❦ ❦ ❦</span><em>'+(safe?('No notes matching "'+safe+'"'):'A blank page, for now. Think it — write it.')+'</em>';
     feed.appendChild(e);
   }
   freshId=null;

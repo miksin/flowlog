@@ -1,8 +1,8 @@
 {
-  "name": "流水本",
-  "short_name": "流水本",
-  "lang": "zh-Hant",
-  "description": "隨手記小筆記的單頁流水帳",
+  "name": "Flowlog",
+  "short_name": "Flowlog",
+  "lang": "en",
+  "description": "A zero-dependency quick-note web app \u2014 one input, feed of notes.",
   "scope": "./",
   "start_url": "./index.html",
   "display": "standalone",

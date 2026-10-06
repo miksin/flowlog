@@ -1,22 +1,29 @@
-# 流水本
+# Flowlog
 
-隨手記小筆記的單頁 web app。一個輸入框，Enter 送出，筆記按時間疊成流水；零依賴、零 build、存在瀏覽器裡，不出網路。
+A dead-simple quick-note web app. One input box, Enter saves, notes stack into a time-ordered feed. Zero dependencies, zero build step — data lives in your browser and never leaves your machine.
 
-**功能**
+## Features
 
-- 單輸入框 + Enter 快記，新筆記螢光黃掃過提示
-- 跨日自動分組（TODAY / YESTERDAY / 日期＋星期）
-- 即時搜尋（`/` 快捷鍵聚焦，Esc 清除）
-- 點筆記就地編輯，hover 刪除
-- localStorage 持久化，PWA 可離線、可裝手機主畫面
+- Single composer, Enter to save — new notes flash with a highlighter sweep
+- Automatic day grouping (TODAY / YESTERDAY / date + weekday)
+- Instant search (`/` focuses it, Esc clears)
+- Click a note to edit in place, hover to delete
+- localStorage persistence, offline-capable PWA (installable to home screen)
+- Warm paper-grain retro light theme
 
-**部屬**
+## Deploy
 
-純靜態檔案，丟上任何 server 即可（service worker 需 HTTPS 或 localhost）：
+It is a static bundle; drop it on any web server (service worker requires HTTPS or localhost):
 
 ```bash
 python3 -m http.server 8000
-# → http://localhost:8000/
+# -> http://localhost:8000/
 ```
 
-**還沒做的**（要用了再說）：#tag、todo 勾選、跨裝置同步（屆時資料只是 `{id, text, ts}` 陣列，升級rie 零遷移成本）。
+## Data shape
+
+Notes are a plain array of `{id, text, ts}` under the `flowlog.v1` localStorage key — future sync or export is trivial.
+
+## Not built yet (on purpose)
+
+Tags, todo checkboxes, cross-device sync. Add them only once real usage asks for them.

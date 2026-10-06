@@ -1,4 +1,4 @@
-/* 流水本 service worker — cache-first shell */
+/* Flowlog service worker — cache-first shell */
 const CACHE = 'liuchuiben-v1';
 const ASSETS = [
   './',
